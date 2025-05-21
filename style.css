@@ -25,6 +25,7 @@ a {
   padding: 10px 0 10px 0;
   text-align: center;
   border-bottom: 2px solid #ffd700;
+  overflow: hidden;
 }
 
 .logo-wrapper {
@@ -50,29 +51,29 @@ a {
 /* Allianz-Wappen um das Logo */
 .emblem {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 280px;
+  height: 280px;
   object-fit: contain;
   z-index: 1;
 }
 
 .emblem-top-left {
-  top: 120px;
+  top: 60px;
   left: 100px;
 }
 
 .emblem-bottom-left {
-  bottom: 120px;
+  bottom: 40px;
   left: 400px;
 }
 
 .emblem-top-right {
-  top: 120px;
+  top: 60px;
   right: 100px;
 }
 
 .emblem-bottom-right {
-  bottom: 120px;
+  bottom: 40px;
   right: 400px;
 }
 
@@ -125,33 +126,15 @@ tr:nth-child(odd) {
   margin-left: 6px;
 }
 
-/* --------------------
-   Tabellenwrapper & Icons
---------------------- */
-.table-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 60px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
 .table-container {
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
 }
 
-.side-icons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-}
-
-.icon {
-  width: 200px;
-  height: 400px;
-  object-fit: contain;
+@media screen and (max-width: 1500px) {
+  html {
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
 }

@@ -39,39 +39,32 @@ async function fetchStreamerStatus(username) {
 }
 
 async function loadStreamers() {
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-    headers: {
-      'X-Access-Key': ACCESS_KEY,
-      'Content-Type': 'application/json'
-    }
-  });
+  try {
+    const res = await fetch('/.netlify/functions/loadData');
+    const result = await res.json();
+    const data = result.streamers;
 
-  const result = await res.json();
-  const data = result.record;
-  streamerRows = [];
-
-  for (const streamer of data) {
-    const status = await fetchStreamerStatus(streamer.twitchName);
-    if (!status) continue;
-
-    const deaths = streamer.clips.filter(c => c && c.trim() !== "").length;
-
-    streamerRows.push({
-      name: status.displayName,
-      nameHtml: `
-        <a href="${status.twitchUrl}" target="_blank">
-          <img class="avatar" src="${status.profileImageUrl}" alt="avatar">
-          ${status.displayName}
-        </a> ${status.isLive ? '<span class="live-badge">LIVE</span>' : ''}`,
-      clipsHtml: streamer.clips.map(c =>
-        c && c.trim() !== "" ? `<td><a href="${c}" target="_blank">Clip</a></td>` : '<td>-</td>'
-      ).join(''),
-      deaths
+    streamerRows = data.map(streamer => {
+      return {
+        name: streamer.name,
+        nameHtml: `
+          <a href="${streamer.twitchUrl}" target="_blank">
+            <img class="avatar" src="${streamer.avatar}" alt="avatar">
+            ${streamer.name}
+          </a> ${streamer.isLive ? '<span class="live-badge">LIVE</span>' : ''}`,
+        clipsHtml: streamer.clips.map(c =>
+          c && c.trim() !== "" ? `<td><a href="${c}" target="_blank">Clip</a></td>` : '<td>-</td>'
+        ).join(''),
+        deaths: streamer.clips.filter(c => c && c.trim() !== "").length
+      };
     });
-  }
 
-  renderTable();
+    renderTable();
+  } catch (err) {
+    console.error("Fehler beim Laden der Streamer:", err);
+  }
 }
+
 
 function renderTable() {
   const tbody = document.getElementById('streamer-table');
