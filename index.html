@@ -1,9 +1,8 @@
-<!-- index.html - Rangliste der Streamer -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WoW HC Event – Rangliste</title>
   <style>
     body {
@@ -55,9 +54,9 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Clip 1</th>
-        <th>Clip 2</th>
-        <th>Clip 3</th>
+        <th>Tod 1</th>
+        <th>Tod 2</th>
+        <th>Tod 3</th>
         <th>Tode</th>
       </tr>
     </thead>
@@ -65,69 +64,83 @@
   </table>
 
   <script>
-    const clientId = 'ahbdg12dbfz1h536z4oixln6rw4cm5';
-    const accessToken = 'evivsdf11txng1f48e3zqumxflprgq';
+    const BIN_ID = "682df6948a456b7966a2d92e";
+    const ACCESS_KEY = "DEIN_ACCESS_KEY_HIER"; // <-- deinen echten Key einsetzen
+    const clientId = "ahbdg12dbfz1h536z4oixln6rw4cm5";
+    const accessToken = "evivsdf11txng1f48e3zqumxflprgq";
 
     async function fetchStreamerStatus(username) {
-      const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
-        headers: {
-          'Client-ID': clientId,
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      const userData = await userRes.json();
-      const user = userData.data[0];
+      try {
+        const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
+          headers: {
+            'Client-ID': clientId,
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const userData = await userRes.json();
+        const user = userData.data?.[0];
+        if (!user) return null;
 
-      const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${user.id}`, {
-        headers: {
-          'Client-ID': clientId,
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      const isLive = streamRes.ok && (await streamRes.json()).data.some(s => s.game_name === 'World of Warcraft');
+        const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${user.id}`, {
+          headers: {
+            'Client-ID': clientId,
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const streamData = await streamRes.json();
+        const isLive = streamData.data?.length > 0;
 
-      return {
-        displayName: user.display_name,
-        profileImageUrl: user.profile_image_url,
-        isLive,
-        twitchUrl: `https://www.twitch.tv/${username}`
-      };
+        return {
+          displayName: user.display_name,
+          profileImageUrl: user.profile_image_url,
+          isLive,
+          twitchUrl: `https://www.twitch.tv/${username}`
+        };
+      } catch (err) {
+        console.error("Fehler bei Twitch-Status:", err);
+        return null;
+      }
     }
 
-    fetch('https://api.jsonbin.io/v3/b/682df6948a456b7966a2d92e/latest', {
-  headers: {
-    'X-Access-Key': '<DEIN_ACCESS_KEY>'
-  }
-})
-  .then(res => res.json())
-  .then(async res => {
-    const data = res.record;
-    const tbody = document.getElementById('streamer-table');
-    
-    for (const streamer of data) {
-      const status = await fetchStreamerStatus(streamer.twitchName);
-      const row = document.createElement('tr');
-      const deaths = streamer.clips.filter(c => c).length;
+    async function loadStreamers() {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: {
+          'X-Access-Key': ACCESS_KEY,
+          'Content-Type': 'application/json'
+        }
+      });
 
-      row.innerHTML = `
-        <td>
-          <a href="${status.twitchUrl}" target="_blank">
-            <img class="avatar" src="${status.profileImageUrl}" alt="avatar">
-            ${status.displayName}
-          </a>
-          ${status.isLive ? '<span class="live-badge">LIVE</span>' : ''}
-        </td>
-        ${streamer.clips.map(c =>
-          c ? `<td><a href="${c}" target="_blank">Clip</a></td>` : '<td>-</td>'
-        ).join('')}
-        <td>${deaths}/3</td>
-      `;
+      const result = await res.json();
+      const data = result.record;
+      const tbody = document.getElementById('streamer-table');
 
-      tbody.appendChild(row);
+      for (const streamer of data) {
+        const status = await fetchStreamerStatus(streamer.twitchName);
+        if (!status) continue;
+
+        const deaths = streamer.clips.filter(c => c && c.trim() !== "").length;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <a href="${status.twitchUrl}" target="_blank">
+              <img class="avatar" src="${status.profileImageUrl}" alt="avatar">
+              ${status.displayName}
+            </a>
+            ${status.isLive ? '<span class="live-badge">LIVE</span>' : ''}
+          </td>
+          ${streamer.clips.map((c, i) =>
+            c && c.trim() !== ""
+              ? `<td><a href="${c}" target="_blank">Tod ${i + 1}</a></td>`
+              : '<td>-</td>'
+          ).join('')}
+          <td>${deaths}/3</td>
+        `;
+        tbody.appendChild(row);
+      }
     }
-  });
 
+    loadStreamers();
   </script>
 </body>
 </html>
-
