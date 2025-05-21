@@ -35,7 +35,10 @@
         body: JSON.stringify(data)
       });
 
-      document.getElementById('status').innerText = res.ok ? '✅ Erfolgreich gespeichert!' : '❌ Fehler beim Speichern.';
+      document.getElementById('status').innerText = res.ok
+  ? '✅ Erfolgreich gespeichert!'
+  : `❌ Fehler beim Speichern: ${await res.text()}`;
+
     });
   </script>
 </body>
