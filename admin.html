@@ -1,0 +1,43 @@
+!-- admin.html - Admin-Seite -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+</head>
+<body>
+  <h1>Clips verwalten</h1>
+  <form id="adminForm">
+    <label>Streamer:</label><br>
+    <input name="name" required><br><br>
+    <label>Tode (0-3):</label><br>
+    <input name="deaths" type="number" min="0" max="3"><br><br>
+    <label>Clip 1:</label><br><input name="clip1"><br>
+    <label>Clip 2:</label><br><input name="clip2"><br>
+    <label>Clip 3:</label><br><input name="clip3"><br><br>
+    <button type="submit">Speichern</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const data = {
+        name: form.get('name'),
+        deaths: parseInt(form.get('deaths')) || 0,
+        clips: [form.get('clip1'), form.get('clip2'), form.get('clip3')]
+      };
+
+      const res = await fetch('/.netlify/functions/update-streamer', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      document.getElementById('status').innerText = res.ok ? 'Erfolgreich gespeichert!' : 'Fehler beim Speichern.';
+    });
+  </script>
+</body>
+</html>

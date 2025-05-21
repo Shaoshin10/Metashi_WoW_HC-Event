@@ -1,0 +1,72 @@
+<!-- index.html - Öffentliche Seite -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WoW HC Event</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card {
+      background: #2a2a2a;
+      padding: 15px;
+      border-radius: 10px;
+      width: 250px;
+    }
+    .card img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .clips {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .clip {
+      background: #444;
+      width: 30%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    fetch('streamer_data.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('container');
+        data.forEach(streamer => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <a href="${streamer.twitch}" target="_blank">
+              <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/${streamer.avatar || 'default-profile-image.png'}" alt="Avatar">
+            </a>
+            <h3><a href="${streamer.twitch}" target="_blank">${streamer.name}</a></h3>
+            <p>${streamer.deaths}/3 Tode</p>
+            <div class="clips">
+              ${streamer.clips.map(c => c ? `<a href="${c}" target="_blank" class="clip">Clip</a>` : `<div class="clip">-</div>`).join('')}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      });
+  </script>
+</body>
+</html>
