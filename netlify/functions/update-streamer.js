@@ -1,15 +1,9 @@
-// Neue Version von update-streamer.js für JSONBin.io
-// Du brauchst: deine BIN_ID und deinen API_KEY von jsonbin.io
-
-const BIN_ID = "682df6948a456b7966a2d92e"; // Deine Bin-ID
-const API_KEY = "$2a$10$PqXzhtRUMzLMBE8zC5HmOuDWaX07Sep44ldTN.r7uerSNnFk8EH7G"; // API-Key von JSONBin
+const BIN_ID = "682df6948a456b7966a2d92e";
+const ACCESS_KEY = "$2a$10$PqXzhtRUMzLMBE8zC5HmOuDWaX07Sep44ldTN.r7uerSNnFk8EH7G"; // von dir
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: 'Method Not Allowed'
-    };
+    return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
@@ -19,7 +13,7 @@ exports.handler = async (event) => {
     const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
       method: 'GET',
       headers: {
-        'X-Master-Key': API_KEY,
+        'X-Access-Key': ACCESS_KEY,
         'Content-Type': 'application/json'
       }
     });
@@ -28,7 +22,7 @@ exports.handler = async (event) => {
 
     const currentData = (await getRes.json()).record;
 
-    // Streamer suchen oder anhängen
+    // Streamer aktualisieren oder hinzufügen
     const updatedData = [...currentData];
     const existing = updatedData.find(s => s.twitchName === newEntry.twitchName);
 
@@ -38,11 +32,11 @@ exports.handler = async (event) => {
       updatedData.push(newEntry);
     }
 
-    // Daten zurück speichern
+    // Zurückschreiben
     const updateRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
       method: 'PUT',
       headers: {
-        'X-Master-Key': API_KEY,
+        'X-Access-Key': ACCESS_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(updatedData)
