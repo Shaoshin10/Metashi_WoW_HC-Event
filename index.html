@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,27 +8,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <img src="ONE_LIFE.png" alt="ONE LIFE Classic Hardcore Logo" class="title-logo" />
-    <p class="event-date">Start: 23.05.2025 – 19:00 Uhr</p>
+  <header class="hero-section">
+    <img src="Mensch.png" class="emblem emblem-top-left" alt="Mensch" />
+    <img src="Nachtelf.png" class="emblem emblem-bottom-left" alt="Nachtelf" />
+    <img src="Zwerg.png" class="emblem emblem-top-right" alt="Zwerg" />
+    <img src="Gnom.png" class="emblem emblem-bottom-right" alt="Gnom" />
+
+    <div class="logo-wrapper">
+      <img src="ONE_LIFE.png" class="title-logo" alt="ONE LIFE Logo" />
+      <p class="event-date">Start: 23.05.2025 – 19:00 Uhr</p>
+    </div>
   </header>
 
+
+
   <main>
-    <table>
-      <thead>
-        <tr>
-          <th id="sort-name">Name</th>
-          <th>Tod 1</th>
-          <th>Tod 2</th>
-          <th>Tod 3</th>
-          <th id="sort-deaths">Tode</th>
-        </tr>
-      </thead>
-      <tbody id="streamer-table"></tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th id="sort-name">Name</th>
+            <th>Tod 1</th>
+            <th>Tod 2</th>
+            <th>Tod 3</th>
+            <th id="sort-deaths">Tode</th>
+          </tr>
+        </thead>
+        <tbody id="streamer-table"></tbody>
+      </table>
+    </div>
+    </div>
   </main>
+
 
   <script src="logic.js"></script>
 </body>
+
 </html>

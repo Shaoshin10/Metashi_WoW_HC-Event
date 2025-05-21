@@ -1,48 +1,87 @@
-/* Allianz-inspiriertes WoW HC Design */
+/* --------------------
+   Allgemeines Layout
+--------------------- */
 body {
   background: #f4f1e6 url('background_allianz.jpg') repeat;
   color: #1a1a1a;
   font-family: 'Folklore', Georgia, serif;
-  font-style: italic; /* optional */
+  font-style: italic;
   font-size: 1.5em;
   margin: 0;
   padding: 0;
 }
 
-header {
-  text-align: center;
+a {
+  color: #0b3f91;
+  text-decoration: none;
+}
+
+/* --------------------
+   Headerbereich
+--------------------- */
+.hero-section {
+  position: relative;
   background-color: #0c1f4a;
-  color: #ffd700;
-  padding: 10px 10px 5px 10px;  /* Weniger vertikaler Abstand */
-  border-bottom: 4px solid #ffd700;
+  padding: 10px 0 10px 0;
+  text-align: center;
+  border-bottom: 2px solid #ffd700;
 }
 
-header .logo {
-  height: 60px;
-  vertical-align: middle;
-  margin-right: 10px;
+.logo-wrapper {
+  position: relative;
+  z-index: 2;
 }
 
-h1 {
-  display: inline;
-  font-size: 2.5em;
-  font-variant: small-caps;
+.title-logo {
+  max-width: 420px;
+  height: auto;
+  margin: 0 auto 10px auto;
+  display: block;
+  object-fit: contain;
 }
 
 .event-date {
-  font-size: 1.5em;
-  font-weight: "Folklore", IMFellR;
+  font-size: 1.6em;
   color: #ffd700;
-  margin-top: 0;
-  padding-top: 0;
-  line-height: 1.2;
-  position: relative;
-   /* Schiebt Text näher ans Logo */
+  font-style: italic;
+  margin-top: 10px;
 }
 
+/* Allianz-Wappen um das Logo */
+.emblem {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  z-index: 1;
+}
 
+.emblem-top-left {
+  top: 120px;
+  left: 100px;
+}
+
+.emblem-bottom-left {
+  bottom: 120px;
+  left: 400px;
+}
+
+.emblem-top-right {
+  top: 120px;
+  right: 100px;
+}
+
+.emblem-bottom-right {
+  bottom: 120px;
+  right: 400px;
+}
+
+/* --------------------
+   Tabelle
+--------------------- */
 table {
   width: 95%;
+  max-width: 1200px;
   margin: 30px auto;
   border-collapse: collapse;
   font-size: 1.1em;
@@ -68,11 +107,6 @@ tr:nth-child(odd) {
   background-color: #fdfdfd;
 }
 
-a {
-  color: #0b3f91;
-  text-decoration: none;
-}
-
 .avatar {
   width: 36px;
   height: 36px;
@@ -91,52 +125,33 @@ a {
   margin-left: 6px;
 }
 
-.site-header {
-  background: linear-gradient(to right, #1e2a46, #2d3e5e);
-  color: #e6eaf4;
-  padding: 20px 30px;
+/* --------------------
+   Tabellenwrapper & Icons
+--------------------- */
+.table-wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 3px solid #7aa0d8;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  margin-top: 40px;
+  flex-wrap: wrap;
 }
 
-.branding {
+.table-container {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.side-icons {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
 }
 
-.logo {
-  width: 30px;
-  height: 30px;
-  margin-right: 20px;
-}
-
-.title h1 {
-  font-size: 1rem;
-  margin: 0;
-  font-weight: 300;
-  color: #cdd8f7;
-}
-
-.title .skull {
-  font-size: 1.5rem;
-  color: #ff6e6e;
-  margin-left: 10px;
-}
-
-.subtitle {
-  margin: 4px 0 0 0;
-  font-size: 0.95rem;
-  color: #aabbd8;
-}
-
-.title-logo {
-  max-width: 450px;
-  height: auto;
-  display: block;
-  margin: -50px auto -70px auto; /* Negativer Margin entfernt den Abstand */
+.icon {
+  width: 200px;
+  height: 400px;
   object-fit: contain;
-  
 }
