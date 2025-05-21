@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Folklore';
+  src: url('fonts/folklore.woff2') format('woff2'),
+       url('fonts/folklore.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+body {
+  font-family: 'Folklore', Georgia, serif;
+}

@@ -1,0 +1,142 @@
+/* Allianz-inspiriertes WoW HC Design */
+body {
+  background: #f4f1e6 url('background_allianz.jpg') repeat;
+  color: #1a1a1a;
+  font-family: 'Folklore', Georgia, serif;
+  font-style: italic; /* optional */
+  font-size: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  text-align: center;
+  background-color: #0c1f4a;
+  color: #ffd700;
+  padding: 10px 10px 5px 10px;  /* Weniger vertikaler Abstand */
+  border-bottom: 4px solid #ffd700;
+}
+
+header .logo {
+  height: 60px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+h1 {
+  display: inline;
+  font-size: 2.5em;
+  font-variant: small-caps;
+}
+
+.event-date {
+  font-size: 1.5em;
+  font-weight: "Folklore", IMFellR;
+  color: #ffd700;
+  margin-top: 0;
+  padding-top: 0;
+  line-height: 1.2;
+  position: relative;
+   /* Schiebt Text näher ans Logo */
+}
+
+
+table {
+  width: 95%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  font-size: 1.1em;
+}
+
+th, td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  background-color: #132f5c;
+  color: #ffd700;
+  cursor: pointer;
+}
+
+tr:nth-child(even) {
+  background-color: #e4e4e4;
+}
+
+tr:nth-child(odd) {
+  background-color: #fdfdfd;
+}
+
+a {
+  color: #0b3f91;
+  text-decoration: none;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.live-badge {
+  background-color: #e60000;
+  color: white;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  margin-left: 6px;
+}
+
+.site-header {
+  background: linear-gradient(to right, #1e2a46, #2d3e5e);
+  color: #e6eaf4;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #7aa0d8;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+}
+
+.title h1 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 300;
+  color: #cdd8f7;
+}
+
+.title .skull {
+  font-size: 1.5rem;
+  color: #ff6e6e;
+  margin-left: 10px;
+}
+
+.subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.95rem;
+  color: #aabbd8;
+}
+
+.title-logo {
+  max-width: 450px;
+  height: auto;
+  display: block;
+  margin: -50px auto -70px auto; /* Negativer Margin entfernt den Abstand */
+  object-fit: contain;
+  
+}
