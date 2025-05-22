@@ -1,3 +1,4 @@
+
 const fetch = require('node-fetch');
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -20,17 +21,26 @@ async function githubRequest(path, method = 'GET', body = null) {
     body: body ? JSON.stringify(body) : undefined
   });
 
-  if (!res.ok) throw new Error(`GitHub API Fehler: ${res.statusText}`);
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`GitHub API Fehler: ${res.status} - ${errorText}`);
+  }
+
   return await res.json();
 }
 
 // Get file content and SHA
 async function getFile(path) {
   const data = await githubRequest(path);
-  return {
-    sha: data.sha,
-    content: JSON.parse(Buffer.from(data.content, 'base64').toString())
-  };
+  try {
+    const parsedContent = JSON.parse(Buffer.from(data.content, 'base64').toString());
+    return {
+      sha: data.sha,
+      content: parsedContent
+    };
+  } catch (e) {
+    throw new Error(`Fehler beim Parsen von JSON in ${path}: ${e.message}`);
+  }
 }
 
 // Update file content
@@ -71,7 +81,9 @@ async function fetchStreamerStatus(twitchName) {
 
 exports.handler = async () => {
   try {
-    const { sha, content: config } = await getFile(CONFIG_PATH);
+    const { sha: configSha, content: config } = await getFile(CONFIG_PATH);
+    const { sha: oldSha, content: oldData } = await getFile(OUTPUT_PATH);
+
     const streamerData = [];
 
     for (const entry of config) {
@@ -86,7 +98,6 @@ exports.handler = async () => {
       });
     }
 
-    const { sha: oldSha } = await getFile(OUTPUT_PATH);
     await updateFile(OUTPUT_PATH, streamerData, oldSha, '⚙️ streamer_data.json aktualisiert');
 
     return {
