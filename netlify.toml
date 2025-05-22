@@ -1,0 +1,2 @@
+[functions."update_clips"]
+  schedule = "*/15 * * * *" # alle 15 Minuten

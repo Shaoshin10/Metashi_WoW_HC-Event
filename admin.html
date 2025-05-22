@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel</title>
+  <title>Clips verwalten</title>
 </head>
 <body>
   <h1>Clips verwalten</h1>
   <form id="adminForm">
-    <label>Streamer (Twitch-Name):</label><br>
-    <input name="name" required><br><br>
+    <label>Streamer auswählen:</label><br>
+    <select name="name" id="streamerSelect" required></select><br><br>
 
-    <label>Clip 1:</label><br><input name="clip1"><br>
-    <label>Clip 2:</label><br><input name="clip2"><br>
-    <label>Clip 3:</label><br><input name="clip3"><br><br>
+    <label>Clip 1:</label><br><input name="clip1" id="clip1"><br>
+    <label>Clip 2:</label><br><input name="clip2" id="clip2"><br>
+    <label>Clip 3:</label><br><input name="clip3" id="clip3"><br><br>
 
     <button type="submit">Speichern</button>
   </form>
@@ -21,25 +21,55 @@
   <div id="status"></div>
 
   <script>
-    document.getElementById('adminForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = new FormData(e.target);
-      const data = {
-        twitchName: form.get('name'),
-        clips: [form.get('clip1'), form.get('clip2'), form.get('clip3')]
-      };
+    const streamerSelect = document.getElementById('streamerSelect');
 
-      const res = await fetch('/.netlify/functions/update-streamer', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
+    async function loadStreamerList() {
+      const res = await fetch('/data/streamer_config.json');
+      const config = await res.json();
+
+      config.forEach(streamer => {
+        const opt = document.createElement('option');
+        opt.value = streamer.twitchName;
+        opt.textContent = streamer.twitchName;
+        streamerSelect.appendChild(opt);
       });
 
-      document.getElementById('status').innerText = res.ok
-  ? '✅ Erfolgreich gespeichert!'
-  : `❌ Fehler beim Speichern: ${await res.text()}`;
+      streamerSelect.addEventListener('change', () => {
+        const selected = config.find(s => s.twitchName === streamerSelect.value);
+        document.getElementById('clip1').value = selected.clips[0] || '';
+        document.getElementById('clip2').value = selected.clips[1] || '';
+        document.getElementById('clip3').value = selected.clips[2] || '';
+      });
 
+      streamerSelect.dispatchEvent(new Event('change')); // erstes Mal laden
+    }
+
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = streamerSelect.value;
+      const clips = [
+        document.getElementById('clip1').value,
+        document.getElementById('clip2').value,
+        document.getElementById('clip3').value,
+      ];
+
+      const res = await fetch('/.netlify/functions/update_config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ twitchName: name, clips })
+      });
+
+      const status = document.getElementById('status');
+      if (res.ok) {
+        status.textContent = '✅ Erfolgreich gespeichert!';
+      } else {
+        const error = await res.text();
+        status.textContent = `❌ Fehler: ${error}`;
+      }
     });
+
+    loadStreamerList();
   </script>
 </body>
 </html>
