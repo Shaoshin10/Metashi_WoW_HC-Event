@@ -66,7 +66,7 @@ function renderTable() {
       <tr>
         <td>
           <a href="${row.twitchUrl}" target="_blank">
-            <img class="avatar" src="${row.avatar}" alt="avatar">
+            <img class="avatar" src="${row.profileImageUrl}" alt="avatar">
             ${row.displayName}
           </a> ${liveBadge}
         </td>
