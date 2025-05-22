@@ -75,12 +75,12 @@
         // ➕ Delay von 2 Sekunden, damit GitHub sicher die neue Datei speichert
         setTimeout(async () => {
           try {
-            const clipRes = await fetch('/.netlify/functions/update_clips');
+            const clipRes = await fetch('/.netlify/functions/generate_or_update_streamer_data');
             if (!clipRes.ok) throw new Error(await clipRes.text());
 
             status.textContent = '✅ streamer_data.json aktualisiert. Seite neu laden!';
           } catch (err) {
-            status.textContent = `⚠️ Fehler bei update_clips: ${err.message}`;
+            status.textContent = `⚠️ Fehler bei generate_or_update_streamer_data: ${err.message}`;
           }
         }, 2000);
 
