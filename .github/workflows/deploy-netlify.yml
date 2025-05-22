@@ -8,16 +8,19 @@ on:
 jobs:
   check-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Check changed files
+      - name: Check changed files (außer streamer_config.json)
         id: changed
         run: |
-          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -v '^data/streamer_config.json$' || true)" >> $GITHUB_ENV
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -v '^data/streamer_config.json$' || true)
+          echo "CHANGED_FILES=$CHANGED" >> $GITHUB_ENV
 
       - name: Trigger Netlify Build
-        if: env.CHANGED != ''
+        if: env.CHANGED_FILES != ''
         run: |
+          echo "Changes detected, triggering Netlify build..."
           curl -X POST -d '{}' https://api.netlify.com/build_hooks/682f54b0077b0848a16fd5b7
