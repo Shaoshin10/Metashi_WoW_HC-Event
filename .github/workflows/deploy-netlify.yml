@@ -14,13 +14,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check changed files (außer streamer_config.json)
-        id: changed
+        id: files
         run: |
           CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -v '^data/streamer_config.json$' || true)
-          echo "CHANGED_FILES=$CHANGED" >> $GITHUB_ENV
+          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
 
       - name: Trigger Netlify Build
-        if: env.CHANGED_FILES != ''
+        if: steps.files.outputs.changed != ''
         run: |
-          echo "Changes detected, triggering Netlify build..."
+          echo "Änderungen erkannt, sende Build-Hook..."
           curl -X POST -d '{}' https://api.netlify.com/build_hooks/682f54b0077b0848a16fd5b7
