@@ -44,7 +44,7 @@
           document.getElementById('clip3').value = selected.clips[2] || '';
         });
 
-        streamerSelect.dispatchEvent(new Event('change')); // direkt erstes Mal laden
+        streamerSelect.dispatchEvent(new Event('change'));
       } catch (e) {
         status.textContent = '❌ Fehler beim Laden der Streamer-Liste';
       }
@@ -52,7 +52,7 @@
 
     document.getElementById('adminForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      status.textContent = 'Speichere...';
+      status.textContent = '📥 Speichere Clips...';
 
       const name = streamerSelect.value;
       const clips = [
@@ -68,18 +68,22 @@
           body: JSON.stringify({ twitchName: name, clips })
         });
 
-        if (!configRes.ok) {
-          throw new Error(await configRes.text());
-        }
+        if (!configRes.ok) throw new Error(await configRes.text());
 
-        status.textContent = 'Clips gespeichert. Aktualisiere streamer_data.json...';
+        status.textContent = '✅ Clips gespeichert. Warte auf Aktualisierung...';
 
-        const clipRes = await fetch('/.netlify/functions/update_clips');
-        if (!clipRes.ok) {
-          throw new Error(await clipRes.text());
-        }
+        // ➕ Delay von 2 Sekunden, damit GitHub sicher die neue Datei speichert
+        setTimeout(async () => {
+          try {
+            const clipRes = await fetch('/.netlify/functions/update_clips');
+            if (!clipRes.ok) throw new Error(await clipRes.text());
 
-        status.textContent = '✅ Erfolgreich gespeichert und aktualisiert. Seite neu laden!';
+            status.textContent = '✅ streamer_data.json aktualisiert. Seite neu laden!';
+          } catch (err) {
+            status.textContent = `⚠️ Fehler bei update_clips: ${err.message}`;
+          }
+        }, 2000);
+
       } catch (err) {
         status.textContent = `❌ Fehler: ${err.message}`;
       }
