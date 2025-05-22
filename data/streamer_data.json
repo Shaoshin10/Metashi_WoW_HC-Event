@@ -1,1 +1,93 @@
-[]
+[
+  {
+    "twitchName": "Metashi12",
+    "displayName": "metashi12",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/b3848892-7822-473b-b7a3-e7017290410c-profile_image-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Metashi12",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  },
+  {
+    "twitchName": "Sola",
+    "displayName": "Sola",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/sola-profile_image-3b9974dec74aafa6-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Sola",
+    "clips": [
+      "https://www.twitch.tv/sola/clip/SlickDullTarsierDxAbomb-MYcgU3kISANzltr8",
+      "",
+      ""
+    ],
+    "deaths": 1,
+    "isLive": false
+  },
+  {
+    "twitchName": "Bonjwa",
+    "displayName": "Bonjwa",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/a4bec7db-47b2-44f7-bb79-6de32e7bbca4-profile_image-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Bonjwa",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  },
+  {
+    "twitchName": "Hahn",
+    "displayName": "Hahn",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/1c4766bc-191a-4ce5-b112-1e59bccaf562-profile_image-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Hahn",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  },
+  {
+    "twitchName": "Kiba",
+    "displayName": "Kiba",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/d393ec01-1075-4a66-9392-2ae5e5c68640-profile_image-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Kiba",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  },
+  {
+    "twitchName": "Karni",
+    "displayName": "Karni",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/d6f5f16e-da3b-4618-8b77-e2b529833d96-profile_image-300x300.jpeg",
+    "twitchUrl": "https://www.twitch.tv/Karni",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  },
+  {
+    "twitchName": "Kimuh",
+    "displayName": "Kimuh",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/9166410c-ec5a-4f29-bd32-84807857a494-profile_image-300x300.png",
+    "twitchUrl": "https://www.twitch.tv/Kimuh",
+    "clips": [
+      "",
+      "",
+      ""
+    ],
+    "deaths": 0,
+    "isLive": false
+  }
+]
