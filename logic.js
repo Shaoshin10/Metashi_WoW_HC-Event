@@ -5,28 +5,27 @@ let streamerRows = [];
 
 async function fetchLiveStatus(username) {
   try {
-    // Twitch-ID abrufen
     const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
       headers: {
         'Client-ID': clientId,
         'Authorization': `Bearer ${accessToken}`
       }
     });
+
     const userData = await userRes.json();
     const user = userData.data?.[0];
     if (!user) return false;
 
-    // Stream-Status prüfen
     const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${user.id}`, {
       headers: {
         'Client-ID': clientId,
         'Authorization': `Bearer ${accessToken}`
       }
     });
+
     const streamData = await streamRes.json();
     const stream = streamData.data?.[0];
 
-    // Nur wenn Spiel "World of Warcraft"
     return stream && stream.game_name === "World of Warcraft";
   } catch (err) {
     console.error(`❌ Fehler bei Livestatus für ${username}:`, err);
@@ -38,7 +37,6 @@ async function loadStreamers() {
   const res = await fetch('/data/streamer_data.json');
   const data = await res.json();
 
-  // Basisdaten vorbereiten
   streamerRows = data.map(streamer => {
     const deaths = streamer.clips.filter(c => c?.trim()).length;
     return {
@@ -54,6 +52,7 @@ async function loadStreamers() {
 
   renderTable();
   updateLiveStatus();
+  setInterval(updateLiveStatus, 60000); // ⏱ alle 60 Sekunden automatisch aktualisieren
 }
 
 function renderTable() {
@@ -83,7 +82,6 @@ async function updateLiveStatus() {
   renderTable();
 }
 
-// Sortierung (optional – bei Bedarf aktivieren)
 function sortTable(byKey, ascending = true) {
   streamerRows.sort((a, b) => {
     if (byKey === 'name') {

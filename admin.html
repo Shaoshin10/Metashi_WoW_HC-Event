@@ -18,34 +18,41 @@
     <button type="submit">Speichern</button>
   </form>
 
-  <div id="status"></div>
+  <div id="status" style="margin-top: 1em;"></div>
 
   <script>
     const streamerSelect = document.getElementById('streamerSelect');
+    const status = document.getElementById('status');
+    let config = [];
 
     async function loadStreamerList() {
-      const res = await fetch('/data/streamer_config.json');
-      const config = await res.json();
+      try {
+        const res = await fetch('/data/streamer_config.json');
+        config = await res.json();
 
-      config.forEach(streamer => {
-        const opt = document.createElement('option');
-        opt.value = streamer.twitchName;
-        opt.textContent = streamer.twitchName;
-        streamerSelect.appendChild(opt);
-      });
+        config.forEach(streamer => {
+          const opt = document.createElement('option');
+          opt.value = streamer.twitchName;
+          opt.textContent = streamer.twitchName;
+          streamerSelect.appendChild(opt);
+        });
 
-      streamerSelect.addEventListener('change', () => {
-        const selected = config.find(s => s.twitchName === streamerSelect.value);
-        document.getElementById('clip1').value = selected.clips[0] || '';
-        document.getElementById('clip2').value = selected.clips[1] || '';
-        document.getElementById('clip3').value = selected.clips[2] || '';
-      });
+        streamerSelect.addEventListener('change', () => {
+          const selected = config.find(s => s.twitchName === streamerSelect.value);
+          document.getElementById('clip1').value = selected.clips[0] || '';
+          document.getElementById('clip2').value = selected.clips[1] || '';
+          document.getElementById('clip3').value = selected.clips[2] || '';
+        });
 
-      streamerSelect.dispatchEvent(new Event('change')); // erstes Mal laden
+        streamerSelect.dispatchEvent(new Event('change')); // direkt erstes Mal laden
+      } catch (e) {
+        status.textContent = '❌ Fehler beim Laden der Streamer-Liste';
+      }
     }
 
     document.getElementById('adminForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      status.textContent = 'Speichere...';
 
       const name = streamerSelect.value;
       const clips = [
@@ -54,18 +61,27 @@
         document.getElementById('clip3').value,
       ];
 
-      const res = await fetch('/.netlify/functions/update_config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ twitchName: name, clips })
-      });
+      try {
+        const configRes = await fetch('/.netlify/functions/update_config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ twitchName: name, clips })
+        });
 
-      const status = document.getElementById('status');
-      if (res.ok) {
-        status.textContent = '✅ Erfolgreich gespeichert!';
-      } else {
-        const error = await res.text();
-        status.textContent = `❌ Fehler: ${error}`;
+        if (!configRes.ok) {
+          throw new Error(await configRes.text());
+        }
+
+        status.textContent = 'Clips gespeichert. Aktualisiere streamer_data.json...';
+
+        const clipRes = await fetch('/.netlify/functions/update_clips');
+        if (!clipRes.ok) {
+          throw new Error(await clipRes.text());
+        }
+
+        status.textContent = '✅ Erfolgreich gespeichert und aktualisiert. Seite neu laden!';
+      } catch (err) {
+        status.textContent = `❌ Fehler: ${err.message}`;
       }
     });
 
