@@ -1,5 +1,4 @@
 // /netlify/functions/generate_streamer_data.js
-
 const { Octokit } = require("@octokit/rest");
 const fetch = require('node-fetch');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
