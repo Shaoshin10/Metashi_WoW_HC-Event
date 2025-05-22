@@ -1,8 +1,7 @@
 // /netlify/functions/generate_streamer_data.js
 
-import fetch from 'node-fetch';
-import { Octokit } from 'octokit';
-
+const { Octokit } = require("@octokit/rest");
+const fetch = require('node-fetch');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = 'Shaoshin10';
 const REPO_NAME = 'Metashi_WoW_HC-Event';
