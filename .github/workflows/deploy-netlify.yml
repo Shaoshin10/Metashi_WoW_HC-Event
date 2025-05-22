@@ -1,0 +1,23 @@
+name: Deploy to Netlify (außer bei Config-Änderung)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Check changed files
+        id: changed
+        run: |
+          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -v '^data/streamer_config.json$' || true)" >> $GITHUB_ENV
+
+      - name: Trigger Netlify Build
+        if: env.CHANGED != ''
+        run: |
+          curl -X POST -d '{}' https://api.netlify.com/build_hooks/682f54b0077b0848a16fd5b7
