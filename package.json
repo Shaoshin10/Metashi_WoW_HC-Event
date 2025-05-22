@@ -1,0 +1,24 @@
+{
+  "name": "wow_hc_metashi",
+  "version": "1.0.0",
+  "main": "logic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shaoshin10/Metashi_WoW_HC-Event.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shaoshin10/Metashi_WoW_HC-Event/issues"
+  },
+  "homepage": "https://github.com/Shaoshin10/Metashi_WoW_HC-Event#readme",
+  "description": "",
+  "dependencies": {
+    "@octokit/rest": "^21.1.1",
+    "node-fetch": "^3.3.2"
+  }
+}
