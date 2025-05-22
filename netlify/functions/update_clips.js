@@ -8,7 +8,7 @@ const REPO_NAME = 'Metashi_WoW_HC-Event';
 const CONFIG_PATH = 'data/streamer_config.json';
 const DATA_PATH = 'data/streamer_data.json';
 
-// Helper: GitHub API request
+// GitHub API
 async function githubRequest(path, method = 'GET', body = null) {
   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
   const res = await fetch(url, {
@@ -28,7 +28,6 @@ async function githubRequest(path, method = 'GET', body = null) {
   return await res.json();
 }
 
-// Get file content + SHA
 async function getFile(path) {
   const data = await githubRequest(path);
   return {
@@ -37,60 +36,39 @@ async function getFile(path) {
   };
 }
 
-// Update file
 async function updateFile(path, newContent, sha, message) {
-  const encodedContent = Buffer.from(JSON.stringify(newContent, null, 2)).toString('base64');
-  await githubRequest(path, 'PUT', {
+  const contentBase64 = Buffer.from(JSON.stringify(newContent, null, 2)).toString('base64');
+  return githubRequest(path, 'PUT', {
     message,
-    content: encodedContent,
+    content: contentBase64,
     sha
   });
 }
 
 exports.handler = async () => {
   try {
-    // 1. streamer_config.json holen
     const { content: config } = await getFile(CONFIG_PATH);
+    const { sha } = await getFile(DATA_PATH); // wir brauchen nur das SHA zum Überschreiben
 
-    // 2. streamer_data.json holen
-    const { content: data, sha } = await getFile(DATA_PATH);
+    // streamer_data komplett neu aufbauen
+    const rebuiltData = config.map(entry => ({
+      twitchName: entry.twitchName,
+      clips: entry.clips,
+      deaths: entry.clips.filter(c => c && c.trim() !== '').length,
+      displayName: entry.displayName || entry.twitchName,
+      profileImageUrl: entry.profileImageUrl || '',
+      twitchUrl: `https://www.twitch.tv/${entry.twitchName}`,
+      isLive: false
+    }));
 
-    let updated = false;
-
-    // 3. Clips aktualisieren
-    const newData = data.map(entry => {
-      const configEntry = config.find(c => c.twitchName === entry.twitchName);
-      if (configEntry) {
-        const newClips = configEntry.clips;
-        const changed = JSON.stringify(entry.clips) !== JSON.stringify(newClips);
-        if (changed) {
-          updated = true;
-          return {
-            ...entry,
-            clips: newClips,
-            deaths: newClips.filter(c => c && c.trim() !== '').length
-          };
-        }
-      }
-      return entry;
-    });
-
-    if (!updated) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Keine Änderungen – kein Commit nötig.' })
-      };
-    }
-
-    // 4. streamer_data.json aktualisieren
-    await updateFile(DATA_PATH, newData, sha, '🔁 Update streamer_data.json mit neuen Clips');
+    await updateFile(DATA_PATH, rebuiltData, sha, '🔁 Komplett neu generierte streamer_data.json');
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: '✅ streamer_data.json erfolgreich aktualisiert.' })
+      body: JSON.stringify({ message: '✅ streamer_data.json vollständig neu erstellt.' })
     };
   } catch (err) {
-    console.error('❌ Fehler beim Update:', err);
+    console.error('❌ Fehler beim Neuaufbau:', err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: err.message })
