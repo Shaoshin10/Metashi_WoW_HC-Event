@@ -78,7 +78,7 @@
             const clipRes = await fetch('/.netlify/functions/generate_or_update_streamer_data');
             if (!clipRes.ok) throw new Error(await clipRes.text());
 
-            status.textContent = '✅ streamer_data.json aktualisiert. Seite neu laden!';
+            status.textContent = '✅ aktualisierung erfolgreich. In ca 1 min werden die Änderungen sichtbar sein.';
           } catch (err) {
             status.textContent = `⚠️ Fehler bei generate_or_update_streamer_data: ${err.message}`;
           }
